@@ -16,7 +16,7 @@ function App() {
                 <Route path='/home' element={<PetFinder />} />
                 <Route path='/portal' element={<PetProfile />} />
                 <Route path='/login' element={<Login />} />
-v                <Route path='/signup' element={<Signup />} />
+                <Route path='/signup' element={<Signup />} />
 
                 <Route path="*" element={<div>Not Found</div>} />
             </Routes>
