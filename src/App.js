@@ -13,11 +13,10 @@ function App() {
             <Navbar />
             <Routes>
                 <Route path='/about' element={<About />} />
-                <Route path='/home' element={<PetFinder />} />
-                <Route path='/portal' element={<PetProfile />} />
+                <Route path='/' element={<PetFinder />} />  // Changed from '/home' to '/'
+                <Route path='/animal/:id' element={<PetProfile />} /> // Changed to match the ID pattern
                 <Route path='/login' element={<Login />} />
                 <Route path='/signup' element={<Signup />} />
-
                 <Route path="*" element={<div>Not Found</div>} />
             </Routes>
             <Footer />

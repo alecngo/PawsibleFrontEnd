@@ -1,9 +1,29 @@
 import React, { useState } from 'react';
 import Description from '../About/Description';
+import PetList from './PetList';
+import { BrowserRouter as Route, Routes } from 'react-router-dom';
 
 function PetFinder() {
+    const [animals, setAnimals] = useState([]);
     const [zipCode, setZipCode] = useState('');
     const [distance, setDistance] = useState('');
+    const DISTANCE = 50; // Default distance
+
+    function fetchAnimalsNearMe() {
+        const actualDistance = distance ? distance : DISTANCE;
+        fetch(`http://localhost:8081/nearby?zip=${zipCode}&distance=${actualDistance}`)
+            .then(response => response.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    setAnimals(data);
+                } else {
+                    console.error('Unexpected API response:', data);
+                }
+            })
+            .catch(err => {
+                console.error('Error fetching animals:', err);
+            });
+    }
 
     return (
         <>
@@ -35,15 +55,23 @@ function PetFinder() {
                             </div>
 
                             <div className="d-flex justify-content-center">
-                                <a href="" className="btn btn-outline-light border-2 py-md-3 px-md-5">Search</a>
+                                <button 
+                                    onClick={fetchAnimalsNearMe} 
+                                    className="btn btn-outline-light border-2 py-md-3 px-md-5"
+                                >
+                                    Search
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div>
-                <Description />
+            <div className="container mt-5">
+                <Routes>
+                    <Route path="/" element={<PetList animals={animals} />} />
+                </Routes>
             </div>
+            <Description />
         </>
     );
 }
