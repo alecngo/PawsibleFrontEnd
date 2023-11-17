@@ -1,38 +1,64 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import PetDetails from './PetDetails';
 import PetPhotos from './PetPhotos';
 import PetAdoption from './PetAdoption';
 import PetRescueCamp from './PetRescueCamp';
+import aboutImage from '../../../assets/img/about.png';
 
 function PetProfile() {
-    
+    const { id } = useParams(); // This gets the ID from the URL
+    const [animal, setAnimal] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Replace with your actual API endpoint
+        fetch(`http://localhost:8081/findpet/${id}`) 
+            .then(response => response.json())
+            .then(data => {
+                setAnimal(data);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error('Error fetching animal:', error);
+                setLoading(false);
+            });
+    }, [id]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!animal) {
+        return <div>No animal found</div>;
+    }
+
+    // Now using the fetched animal data to display in the components
     return (
         <div className="container mt-5">
             <div className="row justify-content-between mb-8">
                 <div className="col-md-8">
                     <PetDetails 
-                        name="Harper"
-                        breed="Golden Doodle"
-                        location="Somerset, KY"
-                        age="Adult"
-                        gender="Male"
-                        size="Large"
-                        color="Brown"
-                        characteristics={['Friendly', 'Affectionate', 'Curious', 'Gay']}
-                        coatLength="Long"
-                        houseTrained="Yes"
-                        health="Vaccinations up to date, spayed / neutered"
-                        goodInHome="Other Male Dogs."
-                        description="Lorem ipsum dolor sit amet, nam id mundi persecuti neglegentur. Lucilius euripidis efficiantur et vim, eu sit tollit salutatus definiebas. Cu mel brute cetero, choro iriure scaevola vim in, pro ad modus justo rationibus. Modus assentior pri in. Id quo nibh adolescens, in postea quaestio per, aliquip tincidunt sea cu. Cu wisi volumus partiendo sed, nam et movet definitionem, eu solum omittantur his.
-
-                        Mea assum ludus eu. No quo harum putent nominavi, iusto everti principes at sed. In sed dolor perpetua, oratio aliquip nam at, at per docendi principes. Cum case vocent no. Ut vim accumsan persequeris, duis tritani salutatus id vix. Nam utinam delenit deterruisset te."
+                        name={animal.Name}
+                        breed={animal.Breed}
+                        location={`${animal.Contact.Address.City}, ${animal.Contact.Address.State}`}
+                        age={animal.Age}
+                        gender={animal.Gender}
+                        size={animal.Size}
+                        color={animal.Color}
+                        characteristics={animal.Tags}
+                        // coatLength={animal.coatLength}
+                        houseTrained={animal.Attributes.HouseTrained}
+                        // health={animal.health}
+                        // goodInHome={animal.goodInHome}
+                        description={animal.Description}
                     />
                 </div>
                 
                 <div className="col-md-4">
-                    <PetPhotos photos={['...']} />
-                    <PetAdoption petName="Harper" />
-                    <PetRescueCamp location="Somerset, KY" email="rescuecamp@example.com" />
+                    <PetPhotos photos={animal.photos || [aboutImage]} />
+                    <PetAdoption petName={animal.Name} />
+                    <PetRescueCamp location={`${animal.Contact.Address.City}, ${animal.Contact.Address.State}`} email={animal.email} />
                 </div>
             </div>
         </div>
