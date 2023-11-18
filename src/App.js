@@ -13,8 +13,8 @@ function App() {
             <Navbar />
             <Routes>
                 <Route path='/about' element={<About />} />
-                <Route path='/' element={<PetFinder />} />  // Changed from '/home' to '/'
-                <Route path='/animal/:id' element={<PetProfile />} /> // Changed to match the ID pattern
+                <Route path='/' element={<PetFinder />} />  
+                <Route path='/animal/:id' element={<PetProfile />} /> 
                 <Route path='/login' element={<Login />} />
                 <Route path='/signup' element={<Signup />} />
                 <Route path="*" element={<div>Not Found</div>} />
