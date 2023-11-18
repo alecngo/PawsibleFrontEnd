@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import Description from '../About/Description';
 import PetList from './PetList';
-import { BrowserRouter as Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 function PetFinder() {
     const [animals, setAnimals] = useState([]);
@@ -71,7 +70,6 @@ function PetFinder() {
                     <Route path="/" element={<PetList animals={animals} />} />
                 </Routes>
             </div>
-            <Description />
         </>
     );
 }
